@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { supabase } from "../lib/supabase";
-import { QueueToken, FormData } from "../types/queue";
+import { QueueToken, CreateQueueTokenPayload } from "../types/queue";
 
 const TOKEN_EXPIRY_MS = 60 * 60 * 1000; // 1 hour
 
@@ -166,7 +166,9 @@ export const useQueue = (orgId: string, serviceTag: string) => {
     }
   }, [token, orgId, serviceTag, today]);
 
-  const joinQueue = async (formData: FormData): Promise<void> => {
+  const joinQueue = async (
+    formData: CreateQueueTokenPayload
+  ): Promise<void> => {
     setIsLoading(true);
     setError("");
 
@@ -193,7 +195,7 @@ export const useQueue = (orgId: string, serviceTag: string) => {
           org_id: orgId,
           name: formData.name.trim(),
           phone: formData.phone.trim(),
-          people_count: formData.count,
+          people_count: formData.people_count,
           token_number: nextTokenNumber,
           status: "waiting",
           service_date: today,
